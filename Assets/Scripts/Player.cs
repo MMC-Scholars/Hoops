@@ -7,7 +7,8 @@ public class Player : MonoBehaviour, IBaseEntity
     private RaycastHit lookingAt;
     private GameObject heldObject;
     private float holdDistance;
-    public float lookDistance = 10.0f;
+    public float interactDistance = 10.0f;
+    public float throwStrength = 10.0f;
 
 
     // Start is called before the first frame update
@@ -19,8 +20,8 @@ public class Player : MonoBehaviour, IBaseEntity
     // Update is called once per frame
     void Update()
     {
-        raycastUpdate();
-        
+        raycastUpdate(); 
+        if(Input.GetKeyDown(KeyCode.E)) pickUp();
     }
 
     void FixedUpdate()
@@ -31,36 +32,33 @@ public class Player : MonoBehaviour, IBaseEntity
 
     void raycastUpdate()
     {
-        if(Physics.Raycast(this.transform.position, this.transform.TransformDirection(Vector3.forward), out lookingAt, lookDistance))
+        if(Physics.Raycast(this.transform.position, this.transform.TransformDirection(Vector3.forward), out lookingAt, interactDistance))
         {
             Debug.Log("Looking at: " + lookingAt.collider.gameObject.name);
             
-            pickUp();
+        }
+        else 
+        {
+            Debug.Log("Looking at: nothing");
         }
     }
     void pickUp()
     {
-        if (lookingAt.collider.gameObject.CompareTag("Basketball"))
-        {
-            if(Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                heldObject = lookingAt.collider.gameObject;
-                holdDistance = lookingAt.distance;
-            }
-            else if (Input.GetKeyUp(KeyCode.Mouse0))
-            {
-                heldObject = null;
-            }
-        }
-
-        holdObject();
-    }
-
-    void holdObject()
-    {
+        //If currently holding something, drop it
         if(heldObject != null)
         {
-            heldObject.transform.position = this.transform.position + holdDistance * this.transform.TransformDirection(Vector3.forward);
+            heldObject.transform.SetParent(null);
+            heldObject.GetComponent<Rigidbody>().useGravity = true;
+            heldObject.GetComponent<Rigidbody>().AddForce(throwStrength * this.transform.TransformDirection(Vector3.forward), ForceMode.Impulse);
+            Physics.Simulate(Time.fixedDeltaTime);
+            heldObject = null;
         }
+        //If looking at a basketball, pick it up
+        else if(lookingAt.collider.gameObject.CompareTag("Basketball"))
+        {
+            heldObject = lookingAt.collider.gameObject;
+            heldObject.GetComponent<Rigidbody>().useGravity = false;
+            heldObject.transform.SetParent(this.transform);
+        } 
     }
 }
