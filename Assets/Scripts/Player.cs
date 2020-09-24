@@ -58,6 +58,8 @@ public class Player : MonoBehaviour, IBaseEntity
         {
             heldObject = lookingAt.collider.gameObject;
             heldObject.GetComponent<Rigidbody>().useGravity = false;
+            heldObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            heldObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             heldObject.transform.SetParent(this.transform);
         } 
     }
