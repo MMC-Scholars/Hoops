@@ -249,7 +249,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseSensitivityScale: 5
   interactDistance: 10
-  throwStrength: 10
+  maxThrow: 10
+  throwModifier: 5
 --- !u!4 &312055135
 Transform:
   m_ObjectHideFlags: 0
