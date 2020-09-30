@@ -8,13 +8,18 @@ public class Player : BasePawn {
     public float       throwStrength    = 10.0f;
 
     /**
+     * Called on each update frame to update input
+     */
+
+    public override void BaseUpdateInput() {
+        if (BaseInput.isTriggerPressed()) pickUp();
+    }
+
+    /**
      * Called on each update frame
      */
 
-    public override void BaseUpdate() {
-        raycastUpdate();
-        if (Input.GetKeyDown(KeyCode.E)) pickUp();
-    }
+    public override void BaseUpdate() { raycastUpdate(); }
 
     void FixedUpdate() {}
 
