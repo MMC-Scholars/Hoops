@@ -3,7 +3,7 @@
 public class Player : BasePawn {
     private RaycastHit lookingAt;
     private GameObject heldObject;
-    private float      throwStrength    = 0.0f;
+    public float      throwStrength    = 0.0f;
     public float       interactDistance = 10.0f;
     public float       maxThrow         = 10.0f;
     public float       throwModifier    = 1.0f;
@@ -14,7 +14,11 @@ public class Player : BasePawn {
 
     public override void BaseUpdateInput() {
         if (BaseInput.isTriggerPressed()) pickUp();
-        if (heldObject) throwObject();
+        if (heldObject){
+            //TODO change inputs to the equivalent BaseInput 
+            if(Input.GetKey(KeyCode.Mouse1)) startThrow();
+            else if (Input.GetKeyUp(KeyCode.Mouse1)) throwObject();
+        }
     }
 
     /**
@@ -22,8 +26,6 @@ public class Player : BasePawn {
      */
 
     public override void BaseUpdate() { raycastUpdate(); }
-
-    void FixedUpdate() {}
 
     void raycastUpdate() {
         if (Physics.Raycast(this.transform.position,
@@ -43,21 +45,18 @@ public class Player : BasePawn {
             heldObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             heldObject.transform.SetParent(this.transform);
         }
+}
+    void startThrow() {
+        throwStrength += throwModifier * Time.deltaTime;
+        if(throwStrength > maxThrow) throwStrength = maxThrow;
     }
     void throwObject() {
-
-        if(Input.GetKey(KeyCode.Mouse1)){
-            throwStrength += throwModifier * Time.deltaTime;
-            if(throwStrength > maxThrow) throwStrength = maxThrow;
-        } 
-        else if (Input.GetKeyUp(KeyCode.Mouse1)){
-        heldObject.transform.SetParent(null);
-        heldObject.GetComponent<Rigidbody>().useGravity = true;
-        heldObject.GetComponent<Rigidbody>().AddForce(
-            throwStrength * this.transform.TransformDirection(Vector3.forward),
-            ForceMode.Impulse);
-        heldObject    = null;
-        throwStrength = 0.0f;
-        }
+    heldObject.transform.SetParent(null);
+    heldObject.GetComponent<Rigidbody>().useGravity = true;
+    heldObject.GetComponent<Rigidbody>().AddForce(
+        throwStrength * this.transform.TransformDirection(Vector3.forward),
+        ForceMode.Impulse);
+    heldObject    = null;
+    throwStrength = 0.0f;
     }
 }
