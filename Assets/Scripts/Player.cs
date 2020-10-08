@@ -25,17 +25,9 @@ public class Player : BasePawn {
      * Called on each update frame
      */
 
-    public override void BaseUpdate() { raycastUpdate(); }
-
-    void raycastUpdate() {
-        if (Physics.Raycast(this.transform.position,
-                            this.transform.TransformDirection(Vector3.forward),
-                            out lookingAt, interactDistance)) {
-            Debug.Log("Looking at: " + lookingAt.collider.gameObject.name);
-
-        } else {
-            Debug.Log("Looking at: nothing");
-        }
+    public override void BaseUpdate() { 
+        Physics.Raycast(this.transform.position, this.transform.TransformDirection(Vector3.forward),
+                        out lookingAt, interactDistance);
     }
     void pickUp() {
         if (lookingAt.normal != Vector3.zero && lookingAt.collider.gameObject.CompareTag("Basketball")) {
