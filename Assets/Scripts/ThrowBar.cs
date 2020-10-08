@@ -13,7 +13,6 @@ public class ThrowBar : MonoBehaviour
         slider = this.GetComponent<Slider>();
         slider.value = 0.0f;
     }
-
     // Update is called once per frame
     void Update()
     {
