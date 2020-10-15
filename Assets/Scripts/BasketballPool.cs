@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasketballPool : MonoBehaviour
+public class BasketballPool : ABaseEntity
 {
-    public List<GameObject> pool;
     public int size = 5;
     public GameObject basketball;
+    private List<GameObject> pool;
     private int next = 0;
-    // Start is called before the first frame update
-    void Start()
+
+    public override void BaseStart()
     {
+        pool = new List<GameObject>();
         for (int i = 0; i < size; i++)
         {
             GameObject obj = (GameObject)Instantiate(basketball);
@@ -21,6 +22,7 @@ public class BasketballPool : MonoBehaviour
 
     public GameObject getObject()
     {
-        return pool[next++ % size];
+        next++;
+        return pool[next %= size];
     }
 }
