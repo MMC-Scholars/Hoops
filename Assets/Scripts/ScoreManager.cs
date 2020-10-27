@@ -9,16 +9,17 @@ public class ScoreManager : ABaseEntity
     private int difficulty = 0;
     private int maxDifficulty = 4;
     private int[] difficultyThresholds = { 10, 25, 50, 100 };
+    public Timer timer;
     public int Score
     {
         get => score;
         set
         {
+            timer.TimeLeft += value - score;
             score = value;
             this.GetComponent<Text>().text = "Score: " + score;
             if (difficulty < maxDifficulty && score >= difficultyThresholds[difficulty])
             {
-                Debug.Log("Difficulty up");
                 difficulty++;
             }
         }

@@ -18,7 +18,7 @@ public class Hoop : ABaseEntity
     }
     public override void BaseUpdate()
     {
-        if (currentSpeed != speeds[scoreManager.Difficulty])
+        if (scoreManager.Difficulty <= speeds.Length && currentSpeed != speeds[scoreManager.Difficulty])
         {
             currentSpeed = speeds[scoreManager.Difficulty];
         }
