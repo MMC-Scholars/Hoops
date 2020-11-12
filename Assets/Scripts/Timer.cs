@@ -22,6 +22,7 @@ public class Timer : ABaseEntity
         if (timeLeft <= 0)
         {
             endScreen.SetActive(true);
+
             Cursor.lockState = CursorLockMode.None;
             Time.timeScale = 0;
             this.transform.parent.gameObject.SetActive(false);
